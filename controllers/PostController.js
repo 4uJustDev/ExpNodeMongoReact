@@ -1,7 +1,52 @@
 import PostModel from "../models/Post.js"
 
-export const create = async (req, res) => {
+export const getAll = async (req, res) => {
+    try{
+        
+        const posts = await PostModel.find().populate('user').exec();
 
+        res.json(posts);
+    }
+    catch(err){
+        console.log(err);
+        res.status(500).json({
+            message: "Не удалось получить статьи",
+        });
+    }
+};
+export const getOne = async (req, res) => {
+    try {
+        const postId = req.params.id;
+
+        const data = await PostModel.findOneAndUpdate(
+            {
+                _id: postId,
+            },
+            {
+                $inc: {viewsCount: 1},
+            },
+            {
+                returnDocument: 'after'
+            },
+        );
+
+        if(!data){
+            console.log(err);
+            return res.status(500).json({
+                message: "Не удалось вернуть статью",
+            });
+        }
+        
+        res.json(data);
+    }
+    catch(err){
+        console.log(err);
+        res.status(500).json({
+            message: "Не удалось получить статью",
+        });
+    }
+};
+export const create = async (req, res) => {
     try{
         const doc  = new PostModel({
             tittle: req.body.tittle,
@@ -9,7 +54,6 @@ export const create = async (req, res) => {
             tags: req.body.tags,
             imageUrl:req.body.imageUrl,
             user:req.userId,
-            // viewsCount: req.body.views,
         });
 
         const post = await doc.save();
@@ -22,4 +66,4 @@ export const create = async (req, res) => {
             message: "Не удалось создать статью",
         });
     }
-}
+};

@@ -26,8 +26,8 @@ app.get('/auth/me', checkAuth, UserController.auth);
     X   /post/create
     V   /post/:id
 */
-//app.get('/posts', PostController.getAll);
-//app.get('/post/:id', PostController.getOne);
+app.get('/posts', PostController.getAll);
+app.get('/posts/:id', PostController.getOne);
 app.post('/posts', checkAuth, Validations.postCreateValidation, PostController.create);
 //app.delete('/post', checkAuth, PostController.remove);
 //app.patch('/post', checkAuth, PostController.update);
