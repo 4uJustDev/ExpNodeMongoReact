@@ -2,9 +2,11 @@ import express from "express";
 import mongoose from "mongoose";
 
 
-import { registerValidation } from "./validations/auth.js";
 import checkAuth from "./utils/checkAuth.js";
-import * as Controllers from "./controllers/UserController.js"
+
+import * as Validations from "./validations/validations.js";
+import * as UserController from "./controllers/UserController.js"
+import * as PostController from "./controllers/PostController.js"
 
 const app = express();
 const PORT = 4000;
@@ -16,9 +18,19 @@ mongoose
 
 app.use(express.json());
 
-app.post('/auth/login', registerValidation, Controllers.login);
-app.post('/auth/register', registerValidation, Controllers.register);
-app.get('/auth/me', checkAuth, Controllers.auth);
+app.post('/auth/login', Validations.loginValidation, UserController.login);
+app.post('/auth/register', Validations.registerValidation, UserController.register);
+app.get('/auth/me', checkAuth, UserController.auth);
+/*
+    When you create RestFull APi, best practice is:
+    X   /post/create
+    V   /post/:id
+*/
+//app.get('/posts', PostController.getAll);
+//app.get('/post/:id', PostController.getOne);
+app.post('/posts', checkAuth, Validations.postCreateValidation, PostController.create);
+//app.delete('/post', checkAuth, PostController.remove);
+//app.patch('/post', checkAuth, PostController.update);
 
 app.listen(PORT, (err)=>{
     if(err){
