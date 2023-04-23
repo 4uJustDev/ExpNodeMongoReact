@@ -32,7 +32,6 @@ export const getOne = async (req, res) => {
         );
 
         if(!data){
-            console.log(err);
             return res.status(500).json({
                 message: "Не удалось вернуть статью",
             });
