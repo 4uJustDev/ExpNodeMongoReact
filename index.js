@@ -17,20 +17,16 @@ mongoose
 .catch((err) => console.log('DB errror', err));
 
 app.use(express.json());
-
+//Auth
 app.post('/auth/login', Validations.loginValidation, UserController.login);
 app.post('/auth/register', Validations.registerValidation, UserController.register);
 app.get('/auth/me', checkAuth, UserController.auth);
-/*
-    When you create RestFull APi, best practice is:
-    X   /post/create
-    V   /post/:id
-*/
+//Posts
 app.get('/posts', PostController.getAll);
 app.get('/posts/:id', PostController.getOne);
 app.post('/posts', checkAuth, Validations.postCreateValidation, PostController.create);
-//app.delete('/post', checkAuth, PostController.remove);
-//app.patch('/post', checkAuth, PostController.update);
+app.delete('/posts/:id', checkAuth, PostController.remove);
+app.patch('/posts/:id', checkAuth, PostController.update);
 
 app.listen(PORT, (err)=>{
     if(err){
