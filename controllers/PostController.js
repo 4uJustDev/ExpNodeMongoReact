@@ -12,8 +12,9 @@ export const getAll = async (req, res) => {
         res.status(500).json({
             message: "Не удалось получить статьи",
         });
-    }
+    };
 };
+
 export const getOne = async (req, res) => {
     try {
         const postId = req.params.id;
@@ -35,7 +36,7 @@ export const getOne = async (req, res) => {
             return res.status(500).json({
                 message: "Не удалось вернуть статью",
             });
-        }
+        };
         
         res.json(data);
     }
@@ -44,8 +45,9 @@ export const getOne = async (req, res) => {
         res.status(500).json({
             message: "Не удалось получить статью",
         });
-    }
+    };
 };
+
 export const remove = async (req, res) => {
     try {
         const postId = req.params.id;
@@ -61,7 +63,7 @@ export const remove = async (req, res) => {
             return res.status(404).json({
                 message: "Статься не найдена",
             });
-        }
+        };
         
         res.json({
             success: true,
@@ -72,8 +74,9 @@ export const remove = async (req, res) => {
         res.status(500).json({
             message: "Не удалось удалить статью",
         });
-    }
+    };
 };
+
 export const create = async (req, res) => {
     try{
         const doc  = new PostModel({
@@ -93,8 +96,9 @@ export const create = async (req, res) => {
         res.status(500).json({
             message: "Не удалось создать статью",
         });
-    }
+    };
 };
+
 export const update = async (req, res) => {
     try{
         const postId = req.params.id;
@@ -121,5 +125,5 @@ export const update = async (req, res) => {
         res.status(500).json({
             message: "Не удалось обновить статью",
         });
-    }
+    };
 };

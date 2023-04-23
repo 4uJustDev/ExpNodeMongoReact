@@ -13,12 +13,12 @@ export default (req, res, next) => {
         catch(e){
             res.status(403).json({
                 message: "Нет доступа",
-            })
+            });
         }
     }
     else{
         res.status(403).json({
             message: "Нет доступа (токен пустой)",
-        })
-    }
-}
+        });
+    };
+};

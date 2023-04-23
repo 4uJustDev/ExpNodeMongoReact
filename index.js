@@ -2,12 +2,9 @@ import express from "express";
 import mongoose from "mongoose";
 import multer from "multer";
 
-import checkAuth from "./utils/checkAuth.js";
-
 import * as Validations from "./validations/validations.js";
-import * as UserController from "./controllers/UserController.js"
-import * as PostController from "./controllers/PostController.js"
-import handleValidatorErrors from "./utils/handleValidatorErrors.js";
+import { UserController, PostController } from "./controllers/index.js";
+import { handleValidatorErrors, checkAuth } from "./utils/index.js";
 
 mongoose
 .connect('mongodb+srv://Admin:Admin@cluster0.zzdzpkw.mongodb.net/blog')
@@ -37,8 +34,8 @@ app.get('/auth/me', checkAuth, UserController.auth);
 app.post('/upload', checkAuth, upload.single('image'), (req, res)=>{
     res.json({
         url: `/uploads/${req.file.originalname}`
-    })
-})
+    });
+});
 
 //Posts
 app.get('/posts', PostController.getAll);
@@ -50,6 +47,6 @@ app.patch('/posts/:id', checkAuth, Validations.postCreateValidation, handleValid
 app.listen(PORT, (err)=>{
     if(err){
         return console.log(err);
-    }
+    };
     console.log(`Server start at PORT ${PORT}`);
 });
