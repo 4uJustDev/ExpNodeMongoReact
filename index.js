@@ -7,6 +7,7 @@ import checkAuth from "./utils/checkAuth.js";
 import * as Validations from "./validations/validations.js";
 import * as UserController from "./controllers/UserController.js"
 import * as PostController from "./controllers/PostController.js"
+import handleValidatorErrors from "./utils/handleValidatorErrors.js";
 
 mongoose
 .connect('mongodb+srv://Admin:Admin@cluster0.zzdzpkw.mongodb.net/blog')
@@ -27,9 +28,10 @@ const storage = multer.diskStorage({
 const upload = multer({storage});
 
 app.use(express.json());
+app.use('/uploads', express.static('uploads'));
 //Auth
-app.post('/auth/login', Validations.loginValidation, UserController.login);
-app.post('/auth/register', Validations.registerValidation, UserController.register);
+app.post('/auth/login',Validations.loginValidation, handleValidatorErrors, UserController.login);
+app.post('/auth/register', Validations.registerValidation, handleValidatorErrors, UserController.register);
 app.get('/auth/me', checkAuth, UserController.auth);
 
 app.post('/upload', checkAuth, upload.single('image'), (req, res)=>{
@@ -41,9 +43,9 @@ app.post('/upload', checkAuth, upload.single('image'), (req, res)=>{
 //Posts
 app.get('/posts', PostController.getAll);
 app.get('/posts/:id', PostController.getOne);
-app.post('/posts', checkAuth, Validations.postCreateValidation, PostController.create);
+app.post('/posts', checkAuth, Validations.postCreateValidation, handleValidatorErrors, PostController.create);
 app.delete('/posts/:id', checkAuth, PostController.remove);
-app.patch('/posts/:id', checkAuth, PostController.update);
+app.patch('/posts/:id', checkAuth, Validations.postCreateValidation, handleValidatorErrors, PostController.update);
 
 app.listen(PORT, (err)=>{
     if(err){
